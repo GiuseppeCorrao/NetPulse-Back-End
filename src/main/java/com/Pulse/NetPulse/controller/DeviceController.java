@@ -16,6 +16,8 @@ public class DeviceController {
     @Autowired
     private DeviceRepository deviceRepository;
 
+
+
     // 1. GET - Recupera tutti i dispositivi dal database
     // Esempio: GET http://localhost:8080/api/devices
     @GetMapping
@@ -30,8 +32,7 @@ public class DeviceController {
         Optional<Device> device = deviceRepository.findById(id);
 
         // Se il dispositivo esiste restituisce 200 OK, altrimenti 404 Not Found
-        return device.map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
+        return device.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     // 3. POST - Crea e salva un nuovo dispositivo nel database

@@ -12,11 +12,10 @@ public interface DeviceRepository extends JpaRepository<Device, Long> {
 
 
     //Get a List of Device saved on DB
-    @Query(value = "Select * from Devices")
     List<Device> findAll();
 
     //Get a List of Device's name saved on DB
-    @Query(value = "select d.name from Devices d")
+    @Query(value = "select d.name from Device d")
     List<String> getAllNameDevice();
 
     Device findById(long id);
