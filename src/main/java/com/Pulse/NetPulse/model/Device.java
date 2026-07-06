@@ -25,9 +25,9 @@ public class Device {
     private String ip;
     //user
     private String name;
-    private String hostname;
     //user
     private String username;
     private String password;
+
 
 }
