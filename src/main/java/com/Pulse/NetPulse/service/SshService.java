@@ -1,33 +1,67 @@
 package com.Pulse.NetPulse.service;
 
+import com.Pulse.NetPulse.dto.DeviceCompleteInformationDTO;
+import com.Pulse.NetPulse.exceptions.DuplicateDeviceException;
 import com.Pulse.NetPulse.model.Device;
 import com.Pulse.NetPulse.model.DeviceStatus;
+import com.Pulse.NetPulse.repository.DeviceRepository;
 import com.Pulse.NetPulse.repository.DeviceStatusRepository;
 import com.jcraft.jsch.ChannelExec;
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.Session;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class SshService {
 
-    public void CheckActiveDeviceOnRouter(Device dv) {
+    @Autowired
+    DeviceStatusRepository deviceStatusRepository;
 
+    @Autowired
+    DeviceRepository deviceRepository;
+
+    @Transactional
+    public DeviceCompleteInformationDTO CheckActiveDeviceOnRouter(Device dv) {
+
+        //CHECK DUPLICATE: Verify is IP or name exist in database
+        if (deviceRepository.existsByIp(dv.getIp()) || deviceRepository.existsByName(dv.getName())) {
+            // Launch exception
+            throw new DuplicateDeviceException("The device with same ip or same name already exist.");
+        }
+
+        // DECLARE: ssh information, ip, username,password, command
         String host = dv.getIp();
         String username = dv.getUsername();
         String password = dv.getPassword();
-
         String command = "show ip interface brief";
 
+        // DECLARE: Device information object and list
+        List<DeviceStatus> listOfDeviceStatus = new ArrayList<>();
+        Device newDevice = new Device();
+        DeviceCompleteInformationDTO newDeviceResponse = new DeviceCompleteInformationDTO();
+
+
+        //Start Try catch block
         try {
 
-            //Initializing Jsch Class
+            // Save in Repository New Device,
+            newDevice = deviceRepository.save(dv);
+
+            // Set Object Response and genereted Device Id
+            newDeviceResponse.setDevice(newDevice);
+            Long generatedDeviceId = newDevice.getId();
+
+            // Initializing Jsch Class
             JSch jSch = new JSch();
 
-            // 1. Open and Configure new Session
+            // Open and Configure new Session
             Session session = jSch.getSession(username, host);
             session.setPassword(password);
 
@@ -36,21 +70,22 @@ public class SshService {
             config.put("StrictHostKeyChecking", "no");
             session.setConfig(config);
 
-            //Connect with device, timeout of 5 second
+            // Connect with device, timeout of 5 second
             session.connect(5000);
 
-            // 2. Open the channel for execute commands
+            // Open the channel for execute commands
             ChannelExec channel = (ChannelExec) session.openChannel("exec");
             channel.setCommand(command);
 
             // Redirect error on java console
             channel.setErrStream(System.err);
 
-            // 3. Read the output of the command row for row
+            // Read the output of the command row for row
             try (BufferedReader reader = new BufferedReader(new InputStreamReader(channel.getInputStream()))) {
 
                 channel.connect(); //Start remote execution
 
+                // Declare all the setup variables (DeviceStatus Field)
                 String inter_face = "";
                 String ipAddress = "";
                 String ok = "";
@@ -58,18 +93,27 @@ public class SshService {
                 String status = "";
                 String protocol = "";
 
+                // Declare Counter and row variable
                 int counter = 0;
                 String line;
 
+                //Start While cycle, loop when there are entries
                 while ((line = reader.readLine()) != null) {
 
                     if (counter == 0) {
-                        System.out.println(line);
+
+                        //PRINT: Header variable, (test)
+                        //System.out.println(line);
                         counter += 1;
+                        //If counter == 0 skip
                         continue;
                     }
+
+                    //Regex separator, take a word each space
                     String[] tokens = line.split("\\s+");
-                    if (tokens.length >= 5) {
+
+                    //ASSIGNAMENT: assign value to temporary variable
+                    if (tokens.length >= 6) {
                         inter_face = tokens[0];
                         ipAddress = tokens[1];
                         ok = tokens[2];
@@ -77,16 +121,7 @@ public class SshService {
                         status = tokens[4];
                         protocol = tokens[5];
 
-                        // Troviamo STATUS e PROTOCOL cercando le parole chiave nell'array
-                        for (int i = 0; i < tokens.length; i++) {
-                            if (tokens[i].equalsIgnoreCase("STATUS") && (i + 1) < tokens.length) {
-                                status = tokens[i + 1];
-                            }
-                            if (tokens[i].equalsIgnoreCase("PROTOCOL") && (i + 1) < tokens.length) {
-                                protocol = tokens[i + 1];
-                            }
-                        }
-
+                        //PRINT: current field for row
                         System.out.println("Interfaccia: " + inter_face);
                         System.out.println("IP:          " + ipAddress);
                         System.out.println("OK:          " + ok);
@@ -95,7 +130,10 @@ public class SshService {
                         System.out.println("Protocol:    " + protocol);
                         System.out.println("------------------------------------");
 
-                        DeviceStatus ds = new DeviceStatus();
+                        //ASSIGNMENT: assign the variable to DeviceStatus, and on the temorary list and save on Database
+                        DeviceStatus ds = new DeviceStatus(generatedDeviceId,inter_face,ipAddress,ok,method,status,protocol);
+                        listOfDeviceStatus.add(ds);
+                        deviceStatusRepository.save(ds);
 
                     }
                 }
@@ -118,6 +156,11 @@ public class SshService {
 
 
         }
+
+        //Set Converted List to Array to newDeviceResponse
+        newDeviceResponse.setDeviceStatus(listOfDeviceStatus.toArray(new DeviceStatus[0]));
+
+        return newDeviceResponse;
 
     }
 }

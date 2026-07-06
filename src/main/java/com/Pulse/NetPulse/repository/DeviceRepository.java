@@ -20,4 +20,10 @@ public interface DeviceRepository extends JpaRepository<Device, Long> {
 
     Device findById(long id);
 
+    //RETURN: true if the ip exist on the database
+    boolean existsByIp(String ip);
+
+    //RETURN: true if the name exist on the database
+    boolean existsByName(String name);
+
 }
