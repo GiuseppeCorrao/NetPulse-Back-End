@@ -132,15 +132,13 @@ public class SshService {
                         //ASSIGNMENT: assign the variable to DeviceStatus, and on the temorary list and save on Database
                         DeviceStatus ds = new DeviceStatus(generatedDeviceId,inter_face,ipAddress,ok,method,status,protocol);
                         listOfDeviceStatus.add(ds);
-                        deviceStatusRepository.save(ds);
+
 
                     }
                 }
-            }catch (Exception e) {
-                e.printStackTrace();
-
             }
 
+            deviceStatusRepository.saveAll(listOfDeviceStatus);
             // Time delay for waiting the channel finish the execution
             while (channel.isConnected()) {
                 Thread.sleep(100);
@@ -152,7 +150,7 @@ public class SshService {
 
         } catch (Exception e) {
             e.printStackTrace();
-
+            throw new RuntimeException("SSH Execution failed: " + e.getMessage(), e);
 
         }
 
