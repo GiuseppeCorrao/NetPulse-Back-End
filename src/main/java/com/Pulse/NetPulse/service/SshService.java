@@ -47,7 +47,6 @@ public class SshService {
         Device newDevice = new Device();
         DeviceCompleteInformationDTO newDeviceResponse = new DeviceCompleteInformationDTO();
 
-
         //Start Try catch block
         try {
 

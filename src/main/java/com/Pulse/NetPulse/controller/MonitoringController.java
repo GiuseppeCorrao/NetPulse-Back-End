@@ -27,7 +27,9 @@ public class MonitoringController {
     @Operation(summary = "Check all active device", description = "Check all active device on each interface of the router")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successfully created the device and saved information"),
-            @ApiResponse(responseCode = "400", description = "Bad request - Invalid input data")
+            @ApiResponse(responseCode = "400", description = "Bad request - Invalid input data"),
+            @ApiResponse(responseCode = "422", description = "Unprocessable Entity - Duplicate (Entity Already Exists"),
+            @ApiResponse(responseCode = "500", description = "Internal Server Error")
     })
     // Example: POST http://localhost:8080/api/addrouter with a json in Body
     @PostMapping("/addrouter")
