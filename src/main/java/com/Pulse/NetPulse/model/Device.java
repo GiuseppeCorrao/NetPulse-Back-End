@@ -21,9 +21,12 @@ public class Device {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    //host
     private String ip;
+    //user
     private String name;
+    private String hostname;
+    //user
     private String username;
     private String password;
 
