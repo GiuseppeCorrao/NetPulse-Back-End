@@ -3,6 +3,8 @@ package com.Pulse.NetPulse.controller;
 import com.Pulse.NetPulse.model.Device;
 import com.Pulse.NetPulse.repository.DeviceRepository;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -35,7 +37,7 @@ public class DeviceController {
     @Operation(summary = "Get a device by id", description = "Returns a single device as per the provided id")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successfully retrieved the device"),
-            @ApiResponse(responseCode = "404", description = "Not found - The device was not found")
+            @ApiResponse(responseCode = "404", description = "Not found - The device was not found", content = @Content(schema = @Schema(implementation = String.class)))
     })
     @GetMapping("/{id}") // Example: GET http://localhost:8080/api/devices/1
     public ResponseEntity<Device> getDeviceById(@PathVariable Long id) {
@@ -49,7 +51,7 @@ public class DeviceController {
     @Operation(summary = "Create a new device", description = "Creates and saves a new device in the database")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successfully created the device"),
-            @ApiResponse(responseCode = "400", description = "Bad request - Invalid input data")
+            @ApiResponse(responseCode = "400", description = "Bad request - Invalid input data", content = @Content(schema = @Schema(implementation = String.class)))
     })
     // Example: POST http://localhost:8080/api/devices with a json in Body
     @PostMapping
@@ -63,7 +65,7 @@ public class DeviceController {
     @Operation(summary = "Update a device", description = "Updates an existing device's details based on the provided id")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successfully updated the device"),
-            @ApiResponse(responseCode = "404", description = "Not found - The device to update was not found")
+            @ApiResponse(responseCode = "404", description = "Not found - The device to update was not found", content = @Content(schema = @Schema(implementation = String.class)))
     })
     // Example: PUT http://localhost:8080/api/devices/1 with a JSON update in Body
     @PutMapping("/{id}")
@@ -84,7 +86,7 @@ public class DeviceController {
     @Operation(summary = "Delete a device by id", description = "Deletes a device from the database as per the provided id")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successfully deleted the device"),
-            @ApiResponse(responseCode = "404", description = "Not found - The device to delete was not found")
+            @ApiResponse(responseCode = "404", description = "Not found - The device to delete was not found", content = @Content(schema = @Schema(implementation = String.class)))
     })
     // Example: DELETE http://localhost:8080/api/devices/1
     @DeleteMapping("/{id}")
