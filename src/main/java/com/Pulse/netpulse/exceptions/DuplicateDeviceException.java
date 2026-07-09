@@ -1,4 +1,4 @@
-package com.Pulse.NetPulse.exceptions;
+package com.Pulse.netpulse.exceptions;
 
 public class DuplicateDeviceException extends RuntimeException {
     public DuplicateDeviceException(String message) {

@@ -1,7 +1,7 @@
-package com.Pulse.NetPulse.controller;
+package com.Pulse.netpulse.controller;
 
-import com.Pulse.NetPulse.model.Device;
-import com.Pulse.NetPulse.repository.DeviceRepository;
+import com.Pulse.netpulse.model.Device;
+import com.Pulse.netpulse.repository.DeviceRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -21,7 +21,7 @@ import java.util.Optional;
 public class DeviceController {
 
     @Autowired
-    private DeviceRepository deviceRepository;
+    DeviceRepository deviceRepository;
 
     // 1. GET - Retrieve all devices
     @Operation(summary = "Get all devices", description = "Returns a list of all devices in the database")

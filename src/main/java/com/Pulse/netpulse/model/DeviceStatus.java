@@ -1,4 +1,4 @@
-package com.Pulse.NetPulse.model;
+package com.Pulse.netpulse.model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

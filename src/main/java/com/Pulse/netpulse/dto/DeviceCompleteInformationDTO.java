@@ -1,7 +1,7 @@
-package com.Pulse.NetPulse.dto;
+package com.Pulse.netpulse.dto;
 
-import com.Pulse.NetPulse.model.Device;
-import com.Pulse.NetPulse.model.DeviceStatus;
+import com.Pulse.netpulse.model.Device;
+import com.Pulse.netpulse.model.DeviceStatus;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

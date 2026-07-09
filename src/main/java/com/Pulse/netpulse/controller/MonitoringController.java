@@ -1,9 +1,8 @@
-package com.Pulse.NetPulse.controller;
+package com.Pulse.netpulse.controller;
 
-import com.Pulse.NetPulse.dto.DeviceCompleteInformationDTO;
-import com.Pulse.NetPulse.model.Device;
-import com.Pulse.NetPulse.repository.DeviceRepository;
-import com.Pulse.NetPulse.service.SshService;
+import com.Pulse.netpulse.dto.DeviceCompleteInformationDTO;
+import com.Pulse.netpulse.model.Device;
+import com.Pulse.netpulse.service.SshService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -25,6 +24,7 @@ public class MonitoringController {
     @Autowired
     SshService sshService;
 
+    @Deprecated
     // 3. POST - Check all active device on all interface (CISCO Router)
     @Operation(summary = "Check all active device", description = "Check all active device on each interface of the router")
     @ApiResponses(value = {

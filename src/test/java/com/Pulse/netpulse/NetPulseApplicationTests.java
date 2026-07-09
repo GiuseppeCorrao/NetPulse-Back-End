@@ -1,4 +1,4 @@
-package com.Pulse.NetPulse;
+package com.Pulse.netpulse;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

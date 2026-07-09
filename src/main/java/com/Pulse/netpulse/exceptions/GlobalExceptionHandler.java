@@ -1,6 +1,5 @@
-package com.Pulse.NetPulse.exceptions;
+package com.Pulse.netpulse.exceptions;
 
-import com.Pulse.NetPulse.exceptions.DuplicateDeviceException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;

@@ -1,6 +1,6 @@
-package com.Pulse.NetPulse.repository;
+package com.Pulse.netpulse.repository;
 
-import com.Pulse.NetPulse.model.Device;
+import com.Pulse.netpulse.model.Device;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
