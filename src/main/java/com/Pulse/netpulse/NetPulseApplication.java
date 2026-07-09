@@ -1,4 +1,4 @@
-package com.Pulse.NetPulse;
+package com.Pulse.netpulse;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
