@@ -183,17 +183,16 @@ public class SshService {
         try {
             JSch jsch = new JSch();
 
-
-            // Creiamo sessione locale al metodo per thread-safety
+            //Create local session at method for thread-safety
             session = jsch.getSession(user, host, port);
             session.setPassword(password);
             session.setConfig("StrictHostKeyChecking", "no");
             session.connect(30000);
              channel = (ChannelShell) session.openChannel("shell");
 
-            // 🟢 AGGIUNGI QUESTE RIGHE PRIMA DI PRENDERE GLI STREAM:
-            // Imposta un tipo di terminale standard e configura i canali in modo trasparente
-            channel.setPtyType("vanilla"); // Evita che caratteri strani o incompatibilità di terminale chiudano la sessione
+            // set a type of standard terminal and configure the channel in a clear way
+            channel.setPtyType("vanilla"); // No incompatibility of characters
+
 
             sshOutput = channel.getOutputStream();
             ssInput = channel.getInputStream();
@@ -207,7 +206,6 @@ public class SshService {
 
         }
 
-        // Ritorniamo tutto l'occorrente impacchettato
         return new SshSessionWrapper(session, channel, ssInput, sshOutput);
     }
 

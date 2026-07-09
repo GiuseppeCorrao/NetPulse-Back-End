@@ -22,6 +22,6 @@ public class WebSocketConfig implements WebSocketConfigurer {
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
         registry.addHandler(new SshWebSocketHandler(sshService), "/ssh")
-                .setAllowedOrigins("*"); // In produzione inserisci i domini specifici
+                .setAllowedOrigins("*"); //TO SET: Specific domain for security and safety
     }
 }
