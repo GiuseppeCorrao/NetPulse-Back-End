@@ -1,7 +1,8 @@
 package com.Pulse.netpulse.controller.websocket;
 
-import com.Pulse.netpulse.dto.utility.SshSessionWrapper;
+import com.Pulse.netpulse.utility.SshSessionWrapper;
 import com.Pulse.netpulse.service.SshService;
+import com.Pulse.netpulse.utility.parser.TerminalParser;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
@@ -21,6 +22,7 @@ public class SshWebSocketHandler extends TextWebSocketHandler {
     private String host = "";
     private String user = "";
     private String password = "";
+    private final TerminalParser parser = new TerminalParser();
 
     // Possibly state of the conversation
     private enum ConnectionState {
@@ -81,7 +83,7 @@ public class SshWebSocketHandler extends TextWebSocketHandler {
                 session.sendMessage(new TextMessage("Esatblishing connection to " + host + "...\r\n"));
 
 
-                // After collecting credential, stat the service
+                // After collecting credential, start the service
                 try {
                     // 1. Open SSH session
                     this.sshSessionWrapper = sshService.openSshSession(host, user, password);
@@ -97,12 +99,17 @@ public class SshWebSocketHandler extends TextWebSocketHandler {
                         try {
                             while ((i = sshOutput.read(buffer)) != -1) {
                                 if (session.isOpen()) {
-                                    String output = new String(buffer, 0, i, StandardCharsets.UTF_8);
-                                    session.sendMessage(new TextMessage(output));
+                                    String rawOutput = new String(buffer, 0, i, StandardCharsets.UTF_8);
+                                    String jsonOutput = parser.parseToStructuredJson(rawOutput);
+
+                                    if (jsonOutput != null) {
+                                        System.out.println(jsonOutput);
+                                        session.sendMessage(new TextMessage(jsonOutput));
+                                    }
                                 }
                             }
                         } catch (Exception e) {
-                            System.out.println("Interruption of SSH write.");
+                            System.out.println("Interruption of SSH write." + e);
                             try {
                                 session.sendMessage(new TextMessage("Interruption of SSH write."));
                             } catch (IOException ex) {

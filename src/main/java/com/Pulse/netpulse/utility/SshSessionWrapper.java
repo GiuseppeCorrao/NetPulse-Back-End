@@ -1,4 +1,4 @@
-package com.Pulse.netpulse.dto.utility;
+package com.Pulse.netpulse.utility;
 
 import com.jcraft.jsch.ChannelShell;
 import com.jcraft.jsch.Session;

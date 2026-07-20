@@ -1,7 +1,7 @@
 package com.Pulse.netpulse.service;
 
 import com.Pulse.netpulse.dto.DeviceCompleteInformationDTO;
-import com.Pulse.netpulse.dto.utility.SshSessionWrapper;
+import com.Pulse.netpulse.utility.SshSessionWrapper;
 import com.Pulse.netpulse.exceptions.DuplicateDeviceException;
 import com.Pulse.netpulse.model.Device;
 import com.Pulse.netpulse.model.DeviceStatus;
@@ -12,16 +12,13 @@ import com.jcraft.jsch.ChannelShell;
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.Session;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.socket.TextMessage;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
